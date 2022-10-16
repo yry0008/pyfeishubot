@@ -38,7 +38,7 @@ class requestMaker:
         else:
             raise ValueError
     
-    def make_request(self,url,data,*args,**kwargs):
+    def make_request(self,url,data,method="POST",*args,**kwargs):
         if time.time() > self.tenantTTL:
             self.get_new_tenant_access_token()
         if "headers" in kwargs:
@@ -56,10 +56,30 @@ class requestMaker:
             data=None
         if data is not None and data != "":
             kwargs["data"]=data
-        response = requests.request("POST", url, headers=headers,*args,**kwargs)
+        response = requests.request(method, url, headers=headers,*args,**kwargs)
         ret_data = response.json()
         if ret_data["code"] == 0:
             return ret_data["data"]
         else:
             raise ValueError
-        
+    
+    def get_content(self,url,data,method="POST",*args,**kwargs):
+        if time.time() > self.tenantTTL:
+            self.get_new_tenant_access_token()
+        if "headers" in kwargs:
+            headers = kwargs["headers"]
+            headers["Authorization"] = 'Bearer {token}'.format(token=self.tenantToken)
+            del kwargs["headers"]
+        else:
+            headers = {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer {token}'.format(token=self.tenantToken)
+            }
+        if "Content-Type" in headers and headers["Content-Type"] == 'application/json' and type(data) is not str:
+            data = json.dumps(data)
+        if len(data) == 0:
+            data=None
+        if data is not None and data != "":
+            kwargs["data"]=data
+        response = requests.request(method, url, headers=headers,*args,**kwargs)
+        return response.content
