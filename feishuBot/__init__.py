@@ -162,7 +162,7 @@ class Bot:
         """
         Upload a file and get the file id
         """
-        url = self.feishu_url + "/open-apis/im/v1/images"
+        url = self.feishu_url + "/open-apis/im/v1/files"
 
         data={
             'file_name': filename,

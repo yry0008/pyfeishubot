@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="PYfeishuBot",
-    version="0.0.1",
+    version="0.0.2",
     author="Yang",
     author_email="plectra-taproot0y@icloud.com",
     description="A feishu Bot SDK for Python",
