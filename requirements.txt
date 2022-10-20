@@ -1,3 +1,4 @@
-fastapi
-uvicorn[standard]
-requests[socks]>=2.8.1
+requests>=2.28.0
+fastapi>=0.78.0
+uvicorn>=0.17.6
+pycryptodome>=3.14.1

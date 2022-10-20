@@ -13,12 +13,19 @@ if __name__ == "__main__":
     sys.path.insert(0, os.path.join(file_path, '../'))
 
 class requestMaker:
-    def __init__(self,app_id,app_secret):
+    """
+    The object of make request to feishu
+    """
+    def __init__(self,app_id:str,app_secret:str,feishu_url="https://open.feishu.cn"):
         self.app_id = app_id
         self.app_secret = app_secret
+        self.feishu_url = feishu_url
         self.get_new_tenant_access_token()
-    def get_new_tenant_access_token(self):
-        url = "https://open.feishu.cn/open-apis/auth/v3/tenant_access_token/internal"
+    def get_new_tenant_access_token(self)->dict:
+        """
+        Get the new tenant access token and expire time.
+        """
+        url = self.feishu_url + "/open-apis/auth/v3/tenant_access_token/internal"
         payload = json.dumps({
             "app_id": self.app_id,
             "app_secret": self.app_secret
@@ -39,6 +46,9 @@ class requestMaker:
             raise ValueError
     
     def make_request(self,url,data,method="POST",*args,**kwargs):
+        """
+        Make a general Restful API Request to feishu
+        """
         if time.time() > self.tenantTTL:
             self.get_new_tenant_access_token()
         if "headers" in kwargs:
@@ -64,6 +74,9 @@ class requestMaker:
             raise ValueError
     
     def get_content(self,url,data,method="POST",*args,**kwargs):
+        """
+        Get a file from feishu
+        """
         if time.time() > self.tenantTTL:
             self.get_new_tenant_access_token()
         if "headers" in kwargs:
