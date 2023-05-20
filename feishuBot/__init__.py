@@ -267,6 +267,9 @@ class Bot:
         self.runserver_background(bind,bind_port,is_sign,is_encrypt)
         self.backend.join()
 
+    def stop(self):
+        self.backend.stop()
+
     def register_handler(self, event_type: str,*args,**kwargs) -> t.Callable:
         """
         Register a webhook handler
